@@ -40,10 +40,11 @@ public class HangmanProject {
 		Scanner input = new Scanner(System.in);
 		boolean isTheLetterIncludedInTheCityName = false;
 		boolean isEndOfTheGame = false;
-		int br = 1; 
+		int br = 1, k = 1;
 		
 		printCityNameWithBlankSpaces(cityNameWithBlankSpaces);
-		while (attempts < ATTEMPTS_BEFORE_HUNG) {
+		//check if the symbol is between ascii code of 'a' to ascii code of 'я'
+		while (attempts < ATTEMPTS_BEFORE_HUNG && isEndOfTheGame == false) {
 			System.out.println("Въведете буква: ");
 			char letterToCheck = input.next(".").charAt(0);
 			
@@ -54,6 +55,7 @@ public class HangmanProject {
 				br++;
 			}
 			
+			//fill blank gaps or add one to the condition for end of the game
 			if (isTheLetterIncludedInTheCityName) {
 				for (int i = 1; i < cityNameWithBlankSpaces.length; i++) {
 					if (cityLetters[i] == letterToCheck) {
@@ -63,18 +65,27 @@ public class HangmanProject {
 			} else {
 				attempts++;
 			}
+			
 			printCityNameWithBlankSpaces(cityNameWithBlankSpaces);
 			
-			//check whether there are any _ with while
+			//check whether it is the end of the game 
+			while (k < cityNameWithBlankSpaces.length) {
+				if (cityNameWithBlankSpaces[k] == '_') {
+					isEndOfTheGame = false;
+					break;
+				} else {
+					isEndOfTheGame = true;
+				}
+				k++;
+			}
 		}
-		
-		//check whether there are any _ to check if you win or lose 
+		 
 		
 		if (isEndOfTheGame) {
 			System.out.println("You win!");
 		} else {
-			System.out.println("You were hung!");
-		}
+			System.out.println("You were hung! Your word to guess was " + city);
+		} 
 
 	}
 
