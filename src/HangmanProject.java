@@ -41,21 +41,28 @@ public class HangmanProject {
 		boolean isTheLetterIncludedInTheCityName = false;
 		boolean isEndOfTheGame = false;
 		int br = 1, k = 1;
-		
+
 		printCityNameWithBlankSpaces(cityNameWithBlankSpaces);
-		//check if the symbol is between ascii code of 'a' to ascii code of 'я'
+		// check if the symbol is between ascii code of 'a' to ascii code of 'я'
 		while (attempts < ATTEMPTS_BEFORE_HUNG && isEndOfTheGame == false) {
 			System.out.println("Въведете буква: ");
 			char letterToCheck = input.next(".").charAt(0);
 			
+			//check if the input is correct 
+			if (Character.isLetter(letterToCheck)) {
+			
+			//convert any capital letter to lower
+			letterToCheck = Character.toLowerCase(letterToCheck);
+	
 			while (br < cityLetters.length) {
 				if (cityLetters[br] == letterToCheck) {
 					isTheLetterIncludedInTheCityName = true;
 				}
 				br++;
 			}
-			
-			//fill blank gaps or add one to the condition for end of the game
+			br = 1;
+
+			// fill blank gaps or add one to the condition for end of the game
 			if (isTheLetterIncludedInTheCityName) {
 				for (int i = 1; i < cityNameWithBlankSpaces.length; i++) {
 					if (cityLetters[i] == letterToCheck) {
@@ -65,10 +72,11 @@ public class HangmanProject {
 			} else {
 				attempts++;
 			}
-			
+			isTheLetterIncludedInTheCityName = false;
+
 			printCityNameWithBlankSpaces(cityNameWithBlankSpaces);
-			
-			//check whether it is the end of the game 
+
+			// check whether it is the end of the game
 			while (k < cityNameWithBlankSpaces.length) {
 				if (cityNameWithBlankSpaces[k] == '_') {
 					isEndOfTheGame = false;
@@ -78,14 +86,17 @@ public class HangmanProject {
 				}
 				k++;
 			}
+			k = 1;
+			} else {
+				System.out.println("Грешен вход! Не въвеждайте символи! Опитайте с буква на кирилица!");
+			}
 		}
-		 
-		
+
 		if (isEndOfTheGame) {
 			System.out.println("You win!");
 		} else {
 			System.out.println("You were hung! Your word to guess was " + city);
-		} 
+		}
 
 	}
 
