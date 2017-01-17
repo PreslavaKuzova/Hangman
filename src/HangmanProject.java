@@ -10,7 +10,7 @@ public class HangmanProject {
 		int attempts = 0;
 		final int ATTEMPTS_BEFORE_HUNG = 6;
 
-		Scanner s = new Scanner(new File("C:/Users/pres/Desktop/places.txt"));
+		Scanner s = new Scanner(new File("src/places.txt"), "UTF-8");
 		ArrayList<String> populatedPlaces = new ArrayList<String>();
 		while (s.hasNextLine()) {
 			populatedPlaces.add(s.nextLine());
@@ -69,8 +69,7 @@ public class HangmanProject {
 					br = 1;
 
 					// fill blank gaps or add one to the condition for end of
-					// the
-					// game
+					// the game
 					if (isTheLetterIncludedInTheCityName) {
 						for (int i = 1; i < cityNameWithBlankSpaces.length; i++) {
 							if (cityLetters[i] == letterToCheck) {
