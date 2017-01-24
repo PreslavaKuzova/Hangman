@@ -83,6 +83,22 @@ public class HangmanProject {
 
 					printCityNameWithBlankSpaces(cityNameWithBlankSpaces);
 
+					switch (attempts) {
+					case 1:
+						break;
+					case 2:
+						break;
+					case 3:
+						break;
+					case 4:
+						break;
+					case 5:
+						break;
+					case 6:
+						break;
+					default:
+					}
+
 					// check whether it is the end of the game
 					while (k < cityNameWithBlankSpaces.length) {
 						if (cityNameWithBlankSpaces[k] == '_') {
@@ -98,7 +114,7 @@ public class HangmanProject {
 					System.out.println("Въведете буква на кирилица!");
 				}
 			} else {
-				System.out.println("Грешен вход! Не въвеждайте символи! Опитайте с буква на кирилица!");
+				System.out.println("Не въвеждайте символи! Опитайте с буква на кирилица!");
 			}
 		}
 
