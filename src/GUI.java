@@ -23,6 +23,7 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import javax.swing.border.LineBorder;
 import javax.swing.JTextArea;
+import java.awt.TextArea;
 
 public class GUI extends JFrame {
 
@@ -37,6 +38,7 @@ public class GUI extends JFrame {
 			public void run() {
 				try {
 					GUI frame = new GUI();
+					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -67,6 +69,11 @@ public class GUI extends JFrame {
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField.setColumns(10);
 		
+		//input from the text field
+		String obtainLetterFromTheTextField = textField.getText();
+		obtainLetterFromTheTextField.matches("[А-Яа-я]{1}");
+		
+		
 		JTextArea textArea = new JTextArea();
 		textArea.setFont(new Font("Calibri Light", Font.BOLD, 25));
 		textArea.setBackground(new Color(102, 153, 153));
@@ -95,6 +102,13 @@ public class GUI extends JFrame {
 					.addComponent(textField, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(253, Short.MAX_VALUE))
 		);
+		panel.setLayout(null);
+		
+		TextArea textArea_1 = new TextArea();
+		textArea_1.setBackground(Color.WHITE);
+		textArea_1.setEditable(false);
+		textArea_1.setBounds(10, 273, 398, 107);
+		panel.add(textArea_1);
 		contentPane.setLayout(gl_contentPane);
 	}
 }
