@@ -131,7 +131,7 @@ public class Hangman_Project {
 
 	public static void inputLetter() {
 		Scanner input = new Scanner(System.in);
-		System.out.println("Въведете буква: ");
+		System.out.print("Въведете буква: ");
 		letterToCheck = input.next(".").charAt(0);
 	}
 
