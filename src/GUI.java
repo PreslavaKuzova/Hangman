@@ -24,11 +24,16 @@ import java.awt.Font;
 import javax.swing.border.LineBorder;
 import javax.swing.JTextArea;
 import java.awt.TextArea;
+import java.awt.Button;
 
-public class GUI extends JFrame {
+public class GUI extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField textField;
+	public JTextField textField_1;
+	
+	private final Button button_1 = new Button("Start Game");
+	//Hangman hangman = new Hangman();
 
 	/**
 	 * Launch the application.
@@ -59,56 +64,63 @@ public class GUI extends JFrame {
 		contentPane.setBackground(new Color(102, 153, 153));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
+
 		JPanel panel = new JPanel();
+		panel.setBounds(5, 5, 418, 411);
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel.setBackground(new Color(255, 255, 255));
-		
+
 		textField = new JTextField();
+		textField.setBounds(478, 123, 199, 40);
 		textField.setFont(new Font("Calibri Light", Font.BOLD, 25));
 		textField.setHorizontalAlignment(SwingConstants.CENTER);
 		textField.setColumns(10);
-		
-		//input from the text field
+
+		// input from the text field
 		String obtainLetterFromTheTextField = textField.getText();
 		obtainLetterFromTheTextField.matches("[А-Яа-я]{1}");
-		
-		
+
 		JTextArea textArea = new JTextArea();
+		textArea.setBounds(453, 82, 251, 35);
+		textArea.setEditable(false);
 		textArea.setFont(new Font("Calibri Light", Font.BOLD, 25));
 		textArea.setBackground(new Color(102, 153, 153));
 		textArea.setText("ВЪВЕДЕТЕ БУКВА ТУК:");
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 418, GroupLayout.PREFERRED_SIZE)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(30)
-							.addComponent(textArea, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(55)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, 199, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(35, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addComponent(panel, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(77)
-					.addComponent(textArea, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(textField, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(253, Short.MAX_VALUE))
-		);
+		contentPane.setLayout(null);
 		panel.setLayout(null);
+
+		textField_1 = new JTextField();
+		textField_1.setEditable(false);
+		textField_1.setBackground(Color.WHITE);
+		textField_1.setBounds(10, 305, 398, 95);
+		panel.add(textField_1);
+		textField_1.setColumns(10);
+		contentPane.add(panel);
+		contentPane.add(textArea);
+		contentPane.add(textField);
+		button_1.setBounds(478, 187, 199, 47);
+		contentPane.add(button_1);
+		button_1.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+			
+		});
 		
-		TextArea textArea_1 = new TextArea();
-		textArea_1.setBackground(Color.WHITE);
-		textArea_1.setEditable(false);
-		textArea_1.setBounds(10, 273, 398, 107);
-		panel.add(textArea_1);
-		contentPane.setLayout(gl_contentPane);
+		
+		
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	
+	
 }

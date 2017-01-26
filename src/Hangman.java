@@ -1,35 +1,39 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
-public class Hangman {
+public class Hangman extends JFrame {
 	static int attempts = 0;
 	final static int ATTEMPTS_BEFORE_HUNG = 6;
 	static String city = "";
 	static char[] cityLetters = new char[0];
 	static char[] cityNameWithBlankSpaces = new char[0];
-
 	static boolean isTheLetterIncludedInTheCityName = false;
 	static boolean isEndOfTheGame = false;
 	static char letterToCheck = ' ';
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public void main(String[] args) throws IOException {
 		gamePreparation();
+		
 		printCityNameThatIncludesBlankSpaces();
 		runGame();
 		winOrLoss();
 	}
 
-	public static void runGame() {
+	public void runGame() throws IOException {
 		while (attempts < ATTEMPTS_BEFORE_HUNG && isEndOfTheGame == false) {
 			inputLetter();
 			checkIsLetter();
 		}
 	}
 
-	public static void checkIsLetter() {
+	public void checkIsLetter() throws IOException {
 		if (Character.isLetter(letterToCheck)) {
 			isTheLetterCyrillic();
 		} else {
@@ -37,7 +41,7 @@ public class Hangman {
 		}
 	}
 
-	public static void isTheLetterCyrillic() {
+	public void isTheLetterCyrillic() throws IOException {
 		int asciiCodeOfTheLetter = 0;
 		asciiCodeOfTheLetter = (int) letterToCheck;
 		if (asciiCodeOfTheLetter >= 1040 && asciiCodeOfTheLetter <= 1103) {
@@ -47,7 +51,7 @@ public class Hangman {
 		}
 	}
 
-	public static void doThisIfTheInputIsCorrect() {
+	public void doThisIfTheInputIsCorrect() throws IOException {
 		convertCapitalLettersToLowerCases();
 		checkIsTheLetterIncluded();
 		fillWithLettersOrIncreaceAttempts();
@@ -77,21 +81,35 @@ public class Hangman {
 		}
 	}
 
-	public static void attemptsCases() {
+	public void attemptsCases() throws IOException {
 		switch (attempts) {
 		case 1:
+			JLabel picLabel_1 = new JLabel(new ImageIcon("src/hangman_pictures/1.jpg"));
+			add(picLabel_1);
 			break;
 		case 2:
+			JLabel picLabel_2 = new JLabel(new ImageIcon("src/hangman_pictures/2.jpg"));
+			add(picLabel_2);
 			break;
 		case 3:
+			JLabel picLabel_3 = new JLabel(new ImageIcon("src/hangman_pictures/3.jpg"));
+			add(picLabel_3);
 			break;
 		case 4:
+			JLabel picLabel_4 = new JLabel(new ImageIcon("src/hangman_pictures/4.jpg"));
+			add(picLabel_4);
 			break;
 		case 5:
+			JLabel picLabel_5 = new JLabel(new ImageIcon("src/hangman_pictures/5.jpg"));
+			add(picLabel_5);
 			break;
 		case 6:
+			JLabel picLabel_6 = new JLabel(new ImageIcon("src/hangman_pictures/6.jpg"));
+			add(picLabel_6);
 			break;
 		default:
+			JLabel default_picLabel = new JLabel(new ImageIcon("src/hangman_pictures/default.jpg"));
+			add(default_picLabel);
 		}
 	}
 
@@ -128,11 +146,13 @@ public class Hangman {
 		letterToCheck = input.next(".").charAt(0);
 	}
 
-	public static void printCityNameThatIncludesBlankSpaces() {
+	public static String printCityNameThatIncludesBlankSpaces() {
+		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < cityNameWithBlankSpaces.length; i++) {
-			System.out.print(cityNameWithBlankSpaces[i]);
+			sb.append(cityNameWithBlankSpaces[i]);
 		}
-		System.out.println();
+		System.out.println(sb.toString());
+		return sb.toString();
 	}
 
 	public static void gamePreparation() throws FileNotFoundException {
