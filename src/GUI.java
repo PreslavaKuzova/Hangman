@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JSplitPane;
@@ -10,6 +11,11 @@ import javax.swing.border.BevelBorder;
 import java.awt.Toolkit;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
 import java.awt.event.ActionEvent;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -25,15 +31,26 @@ import javax.swing.border.LineBorder;
 import javax.swing.JTextArea;
 import java.awt.TextArea;
 import java.awt.Button;
+import javax.swing.JLabel;
 
-public class GUI extends JFrame implements ActionListener {
+public class GUI extends JFrame {
+	//unsuccessful attempt to make the graphic
+	//interface interact with the code
+	static int attempts = 0;
+	final static int ATTEMPTS_BEFORE_HUNG = 6;
+	static String city = "";
+	static char[] cityLetters = new char[0];
+	static char[] cityNameWithBlankSpaces = new char[0];
+
+	static boolean isTheLetterIncludedInTheCityName = false;
+	static boolean isEndOfTheGame = false;
+	static char letterToCheck = ' ';
 
 	private JPanel contentPane;
-	private JTextField textField;
-	public JTextField textField_1;
+	private JTextField textFieldObtainLetter;
 	
-	private final Button button_1 = new Button("Start Game");
-	//Hangman hangman = new Hangman();
+	private final Button button_1 = new Button("ПРОВЕРИ БУКВА");
+	private JLabel lblNewLabel;
 
 	/**
 	 * Launch the application.
@@ -70,15 +87,25 @@ public class GUI extends JFrame implements ActionListener {
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel.setBackground(new Color(255, 255, 255));
 
-		textField = new JTextField();
-		textField.setBounds(478, 123, 199, 40);
-		textField.setFont(new Font("Calibri Light", Font.BOLD, 25));
-		textField.setHorizontalAlignment(SwingConstants.CENTER);
-		textField.setColumns(10);
-
-		// input from the text field
-		String obtainLetterFromTheTextField = textField.getText();
-		obtainLetterFromTheTextField.matches("[А-Яа-я]{1}");
+		textFieldObtainLetter = new JTextField();
+		textFieldObtainLetter.setBounds(478, 123, 199, 40);
+		textFieldObtainLetter.setFont(new Font("Calibri Light", Font.BOLD, 25));
+		textFieldObtainLetter.setHorizontalAlignment(SwingConstants.CENTER);
+		textFieldObtainLetter.setColumns(10);
+		
+		JButton btnNewButton = new JButton("СТАРТИРАЙ ИГРА");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					try {
+						gamePreparation();
+					} catch (FileNotFoundException e1) {
+						e1.printStackTrace();
+					}
+				lblNewLabel.setText(String.valueOf(cityNameWithBlankSpaces));
+			}
+		});
+		btnNewButton.setBounds(513, 381, 150, 35);
+		contentPane.add(btnNewButton);
 
 		JTextArea textArea = new JTextArea();
 		textArea.setBounds(453, 82, 251, 35);
@@ -87,40 +114,178 @@ public class GUI extends JFrame implements ActionListener {
 		textArea.setBackground(new Color(102, 153, 153));
 		textArea.setText("ВЪВЕДЕТЕ БУКВА ТУК:");
 		contentPane.setLayout(null);
-		panel.setLayout(null);
-
-		textField_1 = new JTextField();
-		textField_1.setEditable(false);
-		textField_1.setBackground(Color.WHITE);
-		textField_1.setBounds(10, 305, 398, 95);
-		panel.add(textField_1);
-		textField_1.setColumns(10);
 		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		lblNewLabel = new JLabel("");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 40));
+		lblNewLabel.setBounds(10, 315, 398, 85);
+		panel.add(lblNewLabel);
 		contentPane.add(textArea);
-		contentPane.add(textField);
-		button_1.setBounds(478, 187, 199, 47);
-		contentPane.add(button_1);
+		contentPane.add(textFieldObtainLetter);
+		
+		
 		button_1.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				
+			public void actionPerformed(ActionEvent arg0) {
+				String letter = textFieldObtainLetter.getText();
+				letter.matches("[А-Яа-я]{1}");
+				if (letter.length() != 1) {
+					JOptionPane.showMessageDialog(null, "Въведете само една буква");
+					System.exit(0);
+				}
+				char inputtedLetter = letter.charAt(0);
+				runGame();
 			}
-			
 		});
-		
-		
-		
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		button_1.setBounds(478, 169, 199, 47);
+		contentPane.add(button_1);
 		
 	}
+	
+	public static void gamePreparation() throws FileNotFoundException {
+		ArrayList<String> populatedPlaces = createArrayListWithCities();
+		chooseRandomCity(populatedPlaces);
+		createArrayWithLetters();
+		createArrayToBeModified();
+		fillArrayWithBlankSpaces();
+	}
 
-	
-	
-	
+	public static void fillArrayWithBlankSpaces() {
+		for (int i = 1; i < cityLetters.length; i++) {
+			if (cityLetters[i] == ' ') {
+				cityNameWithBlankSpaces[i] = ' ';
+				cityNameWithBlankSpaces[i + 1] = cityLetters[i + 1];
+				i++;
+			} else {
+				cityNameWithBlankSpaces[i] = '_';
+			}
+
+		}
+	}
+
+	public static void createArrayToBeModified() {
+		cityNameWithBlankSpaces = new char[cityLetters.length];
+		cityNameWithBlankSpaces[0] = cityLetters[0];
+	}
+
+	public static void createArrayWithLetters() {
+		cityLetters = city.toCharArray();
+		cityLetters.toString();
+	}
+
+	public static void chooseRandomCity(ArrayList<String> populatedPlaces) {
+		Random randomCity = new Random();
+		int index = randomCity.nextInt(populatedPlaces.size());
+		city = populatedPlaces.get(index);
+	}
+
+	public static ArrayList<String> createArrayListWithCities() throws FileNotFoundException {
+		Scanner s = new Scanner(new File("src/places.txt"), "UTF-8");
+		ArrayList<String> populatedPlaces = new ArrayList<String>();
+		while (s.hasNextLine()) {
+			populatedPlaces.add(s.nextLine());
+		}
+		s.close();
+		return populatedPlaces;
+	}
+	public static void runGame() {
+		while (attempts < ATTEMPTS_BEFORE_HUNG && isEndOfTheGame == false) {
+			checkIsLetter();
+		}
+	}
+
+	public static void checkIsLetter() {
+		if (Character.isLetter(letterToCheck)) {
+			isTheLetterCyrillic();
+		} else {
+			JOptionPane.showMessageDialog(null, "Не въвеждайте символи! Опитайте с буква на кирилица!");
+		}
+	}
+
+	public static void isTheLetterCyrillic() {
+		int asciiCodeOfTheLetter = 0;
+		asciiCodeOfTheLetter = (int) letterToCheck;
+		if (asciiCodeOfTheLetter >= 1040 && asciiCodeOfTheLetter <= 1103) {
+			doThisIfTheInputIsCorrect();
+		} else {
+			JOptionPane.showMessageDialog(null, "Въведете буква на кирилица!");
+		}
+	}
+
+	public static void doThisIfTheInputIsCorrect() {
+		convertCapitalLettersToLowerCases();
+		checkIsTheLetterIncluded();
+		fillWithLettersOrIncreaceAttempts();
+		attemptsCases();
+		checkIsEndOfTheGame();
+	}
+
+	public static void winOrLoss() {
+		if (isEndOfTheGame) {
+			System.out.println("Печелите!");
+		} else {
+			System.out.println("Бяхте обесени! Думата, която трябваше да познаете, беше " + city);
+		}
+	}
+
+	public static void checkIsEndOfTheGame() {
+		int j = 1;
+		while (j < cityNameWithBlankSpaces.length) {
+			if (cityNameWithBlankSpaces[j] == '_') {
+				isEndOfTheGame = false;
+				break;
+			} else {
+				isEndOfTheGame = true;
+			}
+			j++;
+		}
+	}
+
+	public static void attemptsCases() {
+		switch (attempts) {
+		case 1:
+			
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		default:
+		}
+	}
+
+	public static void fillWithLettersOrIncreaceAttempts() {
+		if (isTheLetterIncludedInTheCityName) {
+			for (int i = 1; i < cityNameWithBlankSpaces.length; i++) {
+				if (cityLetters[i] == letterToCheck) {
+					cityNameWithBlankSpaces[i] = cityLetters[i];
+				}
+			}
+		} else {
+			attempts++;
+		}
+		isTheLetterIncludedInTheCityName = false;
+	}
+
+	public static void checkIsTheLetterIncluded() {
+		int i = 1;
+		while (i < cityLetters.length) {
+			if (cityLetters[i] == letterToCheck) {
+				isTheLetterIncludedInTheCityName = true;
+			}
+			i++;
+		}
+	}
+
+	public static void convertCapitalLettersToLowerCases() {
+		letterToCheck = Character.toLowerCase(letterToCheck);
+	}
+
 }
